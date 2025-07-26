@@ -5,7 +5,7 @@ def navbar():
     st.sidebar.title("🔸 Menu điều hướng")
     page = st.sidebar.radio(
         "Chọn trang",
-        ("🏠 Trang chủ", "📁 Xử lý dữ liệu", "📄 Hướng dẫn", "📞 Liên hệ"),
+        ("🏠 Trang chủ", "📁 Dữ liệu điều trị", "📁 Thông tin khách hàng", "📄 Hướng dẫn", "📞 Liên hệ"),
         index=0
     )
     return page
