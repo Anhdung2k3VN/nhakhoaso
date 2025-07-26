@@ -1,16 +1,12 @@
 import streamlit as st
 import pandas as pd
 import io
-import os
 
 st.set_page_config(page_title="Chuyển đổi dữ liệu điều trị", layout="centered")
 
 
-# Upload file
-
-
 def xuly_file(uploaded_file):
-    
+
     try:
         data1 = pd.read_excel(uploaded_file, engine="openpyxl")
         st.success("✅ Đã đọc file thành công!")
@@ -23,13 +19,19 @@ def xuly_file(uploaded_file):
         converted = pd.DataFrame()
 
         # 1. Mã KH
-        converted["Mã KH"] = data1["Số HS"]
+        converted["Mã KH"] = data1.get("Số HS", "")
 
         # 2. Tên khách hàng
-        converted["Tên khách hàng"] = data1["Họ và tên"]
+        converted["Tên khách hàng"] = (
+            data1.get("Họ và tên")
+            .fillna("")
+            .astype(str)
+            .str.replace(r"\*", "", regex=True)
+            .str.strip()
+        )
 
         # 3. SĐT khách hàng
-        converted["SDT khách hàng"] = data1["Điện thoại"]
+        converted["SDT khách hàng"] = data1.get("Điện thoại", "")
 
         # 4. Ngày điều trị
         def format_date_safe(x):
@@ -37,31 +39,34 @@ def xuly_file(uploaded_file):
                 return ""
             return pd.to_datetime(x).strftime("%d/%m/%Y 00:00")
 
-        converted["Ngày điều trị"] = data1["Ngày"].apply(format_date_safe)
+        converted["Ngày điều trị"] = data1.get("Ngày", pd.Series([""] * len(data1))).apply(format_date_safe)
 
         # 5. Thông tin điều trị
         converted["Thông tin điều trị"] = (
-            data1["Tên thủ thuật "]
+            data1.get("Tên thủ thuật ")
+            .fillna("")
             .astype(str)
             .str.replace(r"\*", "", regex=True)
             .str.strip()
         )
 
         # 6. Răng/Chẩn đoán
-        converted["Răng/Chẩn đoán"] = data1["Lịch liệu trình"]
+        converted["Răng/Chẩn đoán"] = data1["Lịch liệu trình"].fillna("KHÁM & TƯ VẤN")
+
 
         # 7. Tổng tiền
-        converted["Tổng tiền"] = data1["Thực thu"] + data1["Còn nợ"]
+        converted["Tổng tiền"] = data1.get("Thực thu", 0) + data1.get("Còn nợ", 0)
 
         # 8. Thanh toán
-        converted["Thanh toán"] = data1["Thực thu"]
+        converted["Thanh toán"] = data1.get("Thực thu", 0)
 
         # 9. Còn lại
-        converted["Còn lại"] = data1["Còn nợ"]
+        converted["Còn lại"] = data1.get("Còn nợ", 0)
 
         # 10. Bác sĩ
         converted["Bác sĩ"] = (
-            data1["Bác sĩ"]
+            data1.get("Bác sĩ")
+            .fillna("")
             .astype(str)
             .str.replace(r"\*", "", regex=True)
             .str.strip()
@@ -71,7 +76,7 @@ def xuly_file(uploaded_file):
         converted["Phụ tá"] = ""
 
         # 12. Nguồn tiền
-        converted["Nguồn tiền"] = data1["HTT Toán"]
+        converted["Nguồn tiền"] = data1.get("HTT Toán", "")
 
         # 13. Mã dịch vụ
         converted["Mã dịch vụ"] = ""
