@@ -1,10 +1,16 @@
 import streamlit as st
 from xulydata import xuly_file
 from khachhang import xuly_khach_hang
+from chiafile import split_and_download_excel
 from navbar import navbar
+from navbar import set_background_from_local
+
 
 st.set_page_config(page_title="Xử Lý Dữ Liệu", layout="wide")
 page = navbar()
+set_background_from_local("background.jpg")
+
+
 
 if page == "🏠 Trang chủ":
     st.header("Chào mừng đến với ứng dụng xử lý dữ liệu!")
@@ -31,7 +37,16 @@ elif page == "📁 Thông tin khách hàng":
     else:
         st.info("📎 Vui lòng tải lên file Excel để bắt đầu.")
 
-        
+elif page == "📁 Chia nhỏ file":
+    st.header("Tải file & xử lý chia nhỏ file Excel")
+    uploaded_file = st.file_uploader("📤 Tải lên file Excel (.xlsx)", type=["xlsx"])
+    if uploaded_file is not None:
+       split_and_download_excel(uploaded_file)
+       st.write("Quá trình chia nhỏ file đã hoàn tất!")
+
+    else:
+        st.info("📎 Vui lòng tải lên file Excel để bắt đầu.")
+
 
 elif page == "📄 Hướng dẫn":
     st.header("Hướng dẫn sử dụng")
