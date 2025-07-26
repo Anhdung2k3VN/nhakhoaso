@@ -1,9 +1,13 @@
 import streamlit as st
+import requests
 from xulydata import xuly_file
 from khachhang import xuly_khach_hang
 from chiafile import split_and_download_excel
 from navbar import navbar
 from navbar import set_background_from_local
+from navbar import read_quotes_from_file
+
+import random
 
 
 st.set_page_config(page_title="Xử Lý Dữ Liệu", layout="wide")
@@ -12,9 +16,17 @@ set_background_from_local("background.jpg")
 
 
 
+
+# In thử 1 quote ngẫu nhiên
+
+
 if page == "🏠 Trang chủ":
     st.header("Chào mừng đến với ứng dụng xử lý dữ liệu!")
-    st.write("Ứng dụng hỗ trợ xử lý dữ liệu khách hàng.")
+  
+  
+    st.markdown("💡 **Quote hôm nay:**")
+    quotes = read_quotes_from_file("quotes_tien_hiep.txt")
+    st.info(f"💬 {random.choice(quotes)}")
 
 elif page == "📁 Dữ liệu điều trị":
     st.header("Tải file & xử lý dữ liệu điều trị")
@@ -43,7 +55,6 @@ elif page == "📁 Chia nhỏ file":
     if uploaded_file is not None:
        split_and_download_excel(uploaded_file)
        st.write("Quá trình chia nhỏ file đã hoàn tất!")
-
     else:
         st.info("📎 Vui lòng tải lên file Excel để bắt đầu.")
 

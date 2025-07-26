@@ -3,12 +3,14 @@ import streamlit as st
 
 def navbar():
     st.sidebar.title("🔸 Menu điều hướng")
+
     page = st.sidebar.radio(
         "Chọn trang",
         ("🏠 Trang chủ", "📁 Dữ liệu điều trị", "📁 Thông tin khách hàng","📁 Chia nhỏ file", "📄 Hướng dẫn", "📞 Liên hệ"),
         index=0
     )
     return page
+
 import base64
 
 def get_base64_of_image(image_path):
@@ -27,13 +29,15 @@ def set_background_from_local(image_path):
         background-attachment: fixed;
     }}
 
-    # .block-container {{
-    #     background-color: rgba(255, 255, 255, 0.8);
-    #     padding: 2rem;
-    #     border-radius: 10px;
-    # }}
     </style>
     """
     st.markdown(css_code, unsafe_allow_html=True)
 
-    
+def read_quotes_from_file(file_path="quotes_tien_hiep.txt"):
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            quotes = [line.strip() for line in f if line.strip()]
+        return quotes
+    except Exception as e:
+        print(f"Lỗi khi đọc file quote: {e}")
+        return []
