@@ -5,12 +5,12 @@ import os
 
 st.set_page_config(page_title="Chuyển đổi dữ liệu điều trị", layout="centered")
 
-st.title("🦷 Chuyển đổi dữ liệu điều trị từ file Excel")
 
 # Upload file
-uploaded_file = st.file_uploader("📤 Tải lên file Excel (.xlsx)", type=["xlsx"])
 
-if uploaded_file is not None:
+
+def xuly_file(uploaded_file):
+    
     try:
         data1 = pd.read_excel(uploaded_file, engine="openpyxl")
         st.success("✅ Đã đọc file thành công!")
@@ -48,7 +48,7 @@ if uploaded_file is not None:
         )
 
         # 6. Răng/Chẩn đoán
-        converted["Răng/Chẩn đoán"] = data1["Lịch liệu trình"].fillna("KHÁM & TƯ VẤN")
+        converted["Răng/Chẩn đoán"] = data1["Lịch liệu trình"]
 
         # 7. Tổng tiền
         converted["Tổng tiền"] = data1["Thực thu"] + data1["Còn nợ"]
@@ -102,5 +102,3 @@ if uploaded_file is not None:
 
     except Exception as e:
         st.error(f"❌ Lỗi khi xử lý: {e}")
-else:
-    st.info("📎 Vui lòng tải lên file Excel để bắt đầu.")
