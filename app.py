@@ -84,15 +84,25 @@ st.markdown("""
     }
     .stHeader {
         background-color: rgba(255, 255, 255, 0.8);
+        color: black;
+        font-size: 24px;
+        font-weight: bold;
     }
     .stMarkdown {
 
         color: rgba(255, 255, 255, 0.8);
         font-size: 16px;
     }
+    header[data-testid="stHeader"] {
+    background-color: rgba(0, 0, 0, 0.0); 
+    box-shadow: none; 
+    color: white !important;
+    }
+    .stApp {
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+    }   
 
-   
   
     </style>
 """, unsafe_allow_html=True)
-
