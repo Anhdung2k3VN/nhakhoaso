@@ -101,8 +101,15 @@ st.markdown("""
     .stApp {
         background-color: rgba(0, 0, 0, 0.5);
         color: white;
-    }   
+    }
 
-  
+   div[role="alert"] {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    color: #333 !important;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 16px;
+    font-style: italic;
+}
     </style>
 """, unsafe_allow_html=True)
