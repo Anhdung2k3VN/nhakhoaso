@@ -4,12 +4,16 @@ import streamlit as st
 def navbar():
     st.sidebar.title("🔸 Menu điều hướng")
 
-    page = st.sidebar.radio(
-        "Chọn trang",
-        ("🏠 Trang chủ", "📁 Dữ liệu điều trị", "📁 Thông tin khách hàng","📁 Chia nhỏ file", "📄 Hướng dẫn", "📞 Liên hệ"),
-        index=0
-    )
-    return page
+    page = {
+        "🏠 Trang chủ": "home",
+        "📁 Dữ liệu điều trị": "data_treatment",
+        "📁 Thông tin khách hàng": "customer_info",
+        "📁 Chia nhỏ file": "split_file",
+        "📄 Hướng dẫn": "guide",
+        "📞 Liên hệ": "contact"
+    }
+    selected_page = st.sidebar.radio("Chọn trang:", list(page.keys()))
+    return page[selected_page]
 
 import base64
 
