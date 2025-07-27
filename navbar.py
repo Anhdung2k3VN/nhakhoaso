@@ -1,5 +1,6 @@
 # navbar.py
 import streamlit as st
+import json
 
 def navbar():
     st.sidebar.title("🔸 Menu điều hướng")
@@ -37,11 +38,14 @@ def set_background_from_local(image_path):
     """
     st.markdown(css_code, unsafe_allow_html=True)
 
-def read_quotes_from_file(file_path="quotes_tien_hiep.txt"):
+def load_quotes(filepath='quotes_tien_hiep.json'):
+    """Tải danh sách quotes từ file JSON."""
     try:
-        with open(file_path, "r", encoding="utf-8") as f:
-            quotes = [line.strip() for line in f if line.strip()]
-        return quotes
-    except Exception as e:
-        print(f"Lỗi khi đọc file quote: {e}")
+        with open(filepath, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        st.error(f"Lỗi: Không tìm thấy file '{filepath}'. Hãy chắc chắn file tồn tại trong cùng thư mục.")
+        return []
+    except json.JSONDecodeError:
+        st.error(f"Lỗi: File '{filepath}' có định dạng JSON không hợp lệ.")
         return []

@@ -1,11 +1,56 @@
 import streamlit as st
+
+
+
+
+st.markdown("""
+    <style>
+
+    .stSidebar {
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+    .stHeader {
+        background-color: rgba(255, 255, 255, 0.8);
+        color: black;
+        font-size: 24px;
+        font-weight: bold;
+    }
+    .stMarkdown {
+      
+        color: white !important;
+        font-size: 16px;
+    }
+    header[data-testid="stHeader"] {
+    background-color: rgba(0, 0, 0, 0.0); 
+    box-shadow: none; 
+    color: white !important;
+    }
+    .stApp {
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+    }
+
+   div[role="alert"] {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    color: #333 !important;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 16px;
+    font-style: italic;
+    }
+ 
+    </style>
+""", unsafe_allow_html=True)
+
+
 import requests
 from xulydata import xuly_file
 from khachhang import xuly_khach_hang
 from chiafile import split_and_download_excel
 from navbar import navbar
 from navbar import set_background_from_local
-from navbar import read_quotes_from_file
+from navbar import load_quotes
+import json
 
 import random
 
@@ -21,13 +66,52 @@ set_background_from_local("background.jpg")
 
 
 if page == "home":
+   
+    
+  
+  
+   
+    quotes = load_quotes('quotes_tien_hiep.json')
+    random_quote = random.choice(quotes)
+    # Hiển thị quote và tác giả với CSS đẹp mắt
+    st.markdown(f"""
+    <div class='quote-box'>
+        <p class='quote-text'>“{random_quote['quote']}”</p>
+        <p class='quote-author'>— {random_quote['author']}</p>
+    </div>
+""", unsafe_allow_html=True)
 
-    st.header("Chào mừng đến với ứng dụng xử lý dữ liệu!")
-  
-  
-    st.markdown("💡 **Quote hôm nay:**")
-    quotes = read_quotes_from_file("quotes_tien_hiep.txt")
-    st.info(f"💬 {random.choice(quotes)}")
+# CSS tùy biến
+    st.markdown("""
+    <style>
+    .quote-box {
+        background-color: rgba(255, 255, 255, 0.8);
+        color: #333;
+        font-style: italic;
+        font-size: 20px;
+        border: 1px solid #ccc;
+        padding: 20px 20px 20px 30px;
+        margin: 20px auto;
+        width: 90%;
+        max-width: 800px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .quote-text {
+        margin-bottom: 10px;
+    }
+
+    .quote-author {
+        font-weight: bold;
+        color: #444;
+        margin: 0;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+
 
 elif page == "data_treatment":
 
@@ -76,40 +160,4 @@ elif page == "contact":
     st.write("Facebook: https://fb.com/doananhdung.work")
 
 
-st.markdown("""
-    <style>
 
-    .stSidebar {
-        background-color: rgba(0, 0, 0, 0.5);
-    }
-    .stHeader {
-        background-color: rgba(255, 255, 255, 0.8);
-        color: black;
-        font-size: 24px;
-        font-weight: bold;
-    }
-    .stMarkdown {
-
-        color: rgba(255, 255, 255, 0.8);
-        font-size: 16px;
-    }
-    header[data-testid="stHeader"] {
-    background-color: rgba(0, 0, 0, 0.0); 
-    box-shadow: none; 
-    color: white !important;
-    }
-    .stApp {
-        background-color: rgba(0, 0, 0, 0.5);
-        color: white;
-    }
-
-   div[role="alert"] {
-    background-color: rgba(255, 255, 255, 0.8) !important;
-    color: #333 !important;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    padding: 16px;
-    font-style: italic;
-}
-    </style>
-""", unsafe_allow_html=True)
