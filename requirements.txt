@@ -1,3 +1,4 @@
 streamlit
 pandas
 openpyxl
+python3-tk
