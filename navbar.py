@@ -4,18 +4,35 @@ import json
 
 def navbar():
     st.sidebar.title("🔸 Menu điều hướng")
-
+    
+    # Cấu trúc trang chính
     page = {
         "🏠 Trang chủ": "home",
-        "📁 Dữ liệu điều trị": "data_treatment",
-        "📁 Thông tin khách hàng": "customer_info",
-        "📁 Chia nhỏ file": "split_file",
+        "🦷 Nha khoa số": {
+            "📋 Thông tin khách hàng": "customer_info",
+            "📁 Dữ liệu điều trị": "data_treatment"
+        },
+         "🦷 Dental flow": {
+             "📋 Fill data": "fill_data",
+            "📋 Thông tin khách hàng": "customer_df",
+            "📁 Dữ liệu điều trị": "data_df"
+        },
+        "📂 Chia file": "split_file",
+        "📂 Gộp file": "merge_excel",
         "📄 Hướng dẫn": "guide",
         "📞 Liên hệ": "contact"
     }
-    selected_page = st.sidebar.radio("Chọn trang:", list(page.keys()))
-    return page[selected_page]
 
+    main_choices = list(page.keys())
+    selected_main = st.sidebar.radio("Chọn trang:", main_choices)
+
+    # Nếu chọn mục có submenu (Nha khoa số)
+    if isinstance(page[selected_main], dict):
+        submenu_keys = list(page[selected_main].keys())
+        selected_sub = st.sidebar.radio(f"→ {selected_main}:", submenu_keys)
+        return page[selected_main][selected_sub]
+    else:
+        return page[selected_main]
 import base64
 
 def get_base64_of_image(image_path):
