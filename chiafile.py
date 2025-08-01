@@ -6,7 +6,7 @@ st.set_page_config(page_title="Chuyển đổi số dòng", layout="centered")
 
 def split_and_download_excel(uploaded_file):
     try:
-        df = pd.read_excel(uploaded_file, engine="openpyxl")
+        df = pd.read_excel(uploaded_file, engine='openpyxl', dtype=str)
         st.success("✅ Đã đọc file thành công!")
 
         # Hiển thị cột

@@ -15,7 +15,8 @@ def navbar():
          "🦷 Dental flow": {
              "📋 Fill data": "fill_data",
             "📋 Thông tin khách hàng": "customer_df",
-            "📁 Dữ liệu điều trị": "data_df"
+            "📁 Dữ liệu điều trị": "data_df",
+            "📅 Ngày tạo": "getdate_df"
         },
         "📂 Chia file": "split_file",
         "📂 Gộp file": "merge_excel",

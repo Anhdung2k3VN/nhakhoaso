@@ -12,6 +12,7 @@ from navbar import load_quotes
 from fill import render_fill_page
 from data_df import handle_file_upload
 from customer_df import handle_customer_file
+from getdate import handle_date_file
 
 
 import random
@@ -194,6 +195,17 @@ elif page == "customer_df":
         st.write("Vui lòng đợi trong giây lát...")
 
         handle_customer_file(uploaded_file)
+    else:
+        st.info("📎 Vui lòng tải lên file Excel để bắt đầu.")
+
+elif page == "getdate_df":
+    st.header("Xử lý ngày ngày tạo")
+    uploaded_file = st.file_uploader("📤 Tải lên file Excel (.xlsx)", type=["xlsx"])
+    if uploaded_file is not None:
+        st.subheader("Xử lý dữ liệu từ file đã tải lên:")
+        st.write("Vui lòng đợi trong giây lát...")
+
+        handle_date_file(uploaded_file)
     else:
         st.info("📎 Vui lòng tải lên file Excel để bắt đầu.")
     
