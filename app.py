@@ -151,11 +151,12 @@ elif page == "customer_info":
         st.info("📎 Vui lòng tải lên file Excel để bắt đầu.")
 
 elif page == "split_file":
-   
+    rows_per_file = st.number_input("🔢 Số dòng mỗi file (không tính dòng tiêu đề):", min_value=1, value=4999)
+
     st.header("Tải file & xử lý chia nhỏ file Excel")
     uploaded_file = st.file_uploader("📤 Tải lên file Excel (.xlsx)", type=["xlsx"])
     if uploaded_file is not None:
-       split_and_download_excel(uploaded_file)
+       split_and_download_excel(uploaded_file, rows_per_file)
        st.write("Quá trình chia nhỏ file đã hoàn tất!")
     else:
         st.info("📎 Vui lòng tải lên file Excel để bắt đầu.")
