@@ -1,4 +1,4 @@
-from turtle import pd
+
 import streamlit as st
 
 import requests
