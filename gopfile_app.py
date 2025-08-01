@@ -9,7 +9,7 @@ def gop_excel(files):
         # Gộp dữ liệu từ các file
         combined_df = pd.DataFrame()
         for file in files:
-            df = pd.read_excel(file, engine='openpyxl')
+            df = pd.read_excel(file, engine='openpyxl', dtype=str)
             combined_df = pd.concat([combined_df, df], ignore_index=True)
 
         st.success("✅ Đã gộp file thành công!")
