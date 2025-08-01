@@ -1,0 +1,48 @@
+.stSidebar {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.stHeader {
+  background-color: rgba(255, 255, 255, 0.8);
+  color: black;
+  font-size: 24px;
+  font-weight: bold;
+}
+.stApp {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+}
+header[data-testid="stHeader"] {
+  background-color: rgba(0, 0, 0, 0);
+  box-shadow: none;
+  color: white !important;
+}
+div[role="alert"] {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  color: #333 !important;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 16px;
+  font-style: italic;
+}
+.quote-box {
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #333;
+  font-style: italic;
+  font-size: 20px;
+  border: 1px solid #ccc;
+  padding: 20px 20px 20px 30px;
+  margin: 20px auto;
+  width: 90%;
+  max-width: 800px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+.quote-text {
+  margin-bottom: 10px;
+}
+.quote-author {
+  font-weight: bold;
+  color: #444;
+  margin: 0;
+}

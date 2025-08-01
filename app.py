@@ -1,165 +1,67 @@
-
 import streamlit as st
+import random
 
-import requests
 from xulydata import xuly_file
 from khachhang import xuly_khach_hang
 from chiafile import split_and_download_excel
 from gopfile_app import gop_excel
-from navbar import navbar
-from navbar import set_background_from_local
-from navbar import load_quotes
+from navbar import navbar, set_background_from_local, load_quotes
 from fill import render_fill_page
 from data_df import handle_file_upload
 from customer_df import handle_customer_file
 from getdate import handle_date_file
 
-
-import random
-
-
-st.markdown("""
-    <style>
-
-    .stSidebar {
-        background-color: rgba(0, 0, 0, 0.5);
-    }
-    .stHeader {
-        background-color: rgba(255, 255, 255, 0.8);
-        color: black;
-        font-size: 24px;
-        font-weight: bold;
-    }
-    .stMarkdown {
-      
-        color: white !important;
-        font-size: 16px;
-    }
-    header[data-testid="stHeader"] {
-    background-color: rgba(0, 0, 0, 0.0); 
-    box-shadow: none; 
-    color: white !important;
-    }
-    .stApp {
-        background-color: rgba(0, 0, 0, 0.5);
-        color: white;
-    }
-
-   div[role="alert"] {
-    background-color: rgba(255, 255, 255, 0.8) !important;
-    color: #333 !important;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    padding: 16px;
-    font-style: italic;
-    }
- 
-    </style>
-""", unsafe_allow_html=True)
-
-
-# CSS tùy biến quote box
-st.markdown("""
-    <style>
-    .quote-box {
-        background-color: rgba(255, 255, 255, 0.8);
-        color: #333;
-        font-style: italic;
-        font-size: 20px;
-        border: 1px solid #ccc;
-        padding: 20px 20px 20px 30px;
-        margin: 20px auto;
-        width: 90%;
-        max-width: 800px;
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        text-align: center;
-    }
-
-    .quote-text {
-        margin-bottom: 10px;
-    }
-
-    .quote-author {
-        font-weight: bold;
-        color: #444;
-        margin: 0;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-
+# ------------------ CÀI ĐẶT GIAO DIỆN ------------------
 st.set_page_config(page_title="Xử Lý Dữ Liệu", layout="wide")
-page = navbar()
+
 set_background_from_local("background.jpg")
 
+with open("style.css", "r", encoding="utf-8") as f:
+    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-
-
-# In thử 1 quote ngẫu nhiên
-
-
-if page == "home":
-   
-    
-  
-   
-
-    quotes = load_quotes('quotes_tien_hiep.json')
-    if "quote" not in st.session_state:
-        st.session_state.quote = random.choice(quotes)
+# ------------------ HÀM DÙNG CHUNG ------------------
+def handle_excel_upload(title, handler_func, extra_input=None):
+    st.header(title)
+    uploaded_file = st.file_uploader("📤 Tải lên file Excel (.xlsx)", type=["xlsx"])
+    if uploaded_file:
+        st.subheader("Xử lý dữ liệu từ file đã tải lên:")
+        st.write("Vui lòng đợi trong giây lát...")
+        if extra_input is not None:
+            handler_func(uploaded_file, extra_input)
+        else:
+            handler_func(uploaded_file)
     else:
+        st.info("📎 Vui lòng tải lên file Excel để bắt đầu.")
+
+# ------------------ NAVIGATION ------------------
+page = navbar()
+
+# ------------------ HOME ------------------
+if page == "home":
+    quotes = load_quotes('quotes_tien_hiep.json')
+    if "quote" not in st.session_state or st.button("🌀 Đổi quote khác"):
         st.session_state.quote = random.choice(quotes)
-# Hiển thị quote
+
     quote = st.session_state.quote
     st.markdown(f"""
-    <div class='quote-box'>
-        <p class='quote-text'>“{quote['quote']}”</p>
-        <p class='quote-author'>— {quote['author']}</p>
-    </div>
-""", unsafe_allow_html=True)
-    
-# Tạm dừng 10s và rerun
-    # time.sleep(10)
-    # st.rerun()
+        <div class='quote-box'>
+            <p class='quote-text'>“{quote['quote']}”</p>
+            <p class='quote-author'>— {quote['author']}</p>
+        </div>
+    """, unsafe_allow_html=True)
 
-
- 
-
-
+# ------------------ XỬ LÝ CÁC CHỨC NĂNG ------------------
 elif page == "data_treatment":
-
-    st.header("Tải file & xử lý dữ liệu điều trị")
-    uploaded_file = st.file_uploader("📤 Tải lên file Excel (.xlsx)", type=["xlsx"])
-    if uploaded_file is not None:
-        st.subheader("Xử lý dữ liệu từ file đã tải lên:")
-        st.write("Vui lòng đợi trong giây lát...")
-        xuly_file(uploaded_file)
-    else:
-        st.info("📎 Vui lòng tải lên file Excel để bắt đầu.")
-
+    handle_excel_upload("Tải file & xử lý dữ liệu điều trị", xuly_file)
 
 elif page == "customer_info":
-  
-    st.header("Tải file & xử lý thông tin khách hàng")
-    uploaded_file = st.file_uploader("📤 Tải lên file Excel (.xlsx)", type=["xlsx"])
-    if uploaded_file is not None:
-        st.subheader("Xử lý dữ liệu từ file đã tải lên:")
-        st.write("Vui lòng đợi trong giây lát...")
-        xuly_khach_hang(uploaded_file)
-    else:
-        st.info("📎 Vui lòng tải lên file Excel để bắt đầu.")
+    handle_excel_upload("Tải file & xử lý thông tin khách hàng", xuly_khach_hang)
 
 elif page == "split_file":
     rows_per_file = st.number_input("🔢 Số dòng mỗi file (không tính dòng tiêu đề):", min_value=1, value=4999)
+    handle_excel_upload("Tải file & xử lý chia nhỏ file Excel", split_and_download_excel, extra_input=rows_per_file)
+    st.success("✅ Quá trình chia nhỏ file đã hoàn tất!")
 
-    st.header("Tải file & xử lý chia nhỏ file Excel")
-    uploaded_file = st.file_uploader("📤 Tải lên file Excel (.xlsx)", type=["xlsx"])
-    if uploaded_file is not None:
-       split_and_download_excel(uploaded_file, rows_per_file)
-       st.write("Quá trình chia nhỏ file đã hoàn tất!")
-    else:
-        st.info("📎 Vui lòng tải lên file Excel để bắt đầu.")
 elif page == "merge_excel":
     st.header("Gộp nhiều file Excel thành một")
     uploaded_files = st.file_uploader("📤 Tải lên các file Excel (.xlsx)", type=["xlsx"], accept_multiple_files=True)
@@ -168,58 +70,26 @@ elif page == "merge_excel":
     else:
         st.info("📎 Vui lòng tải lên ít nhất một file Excel để gộp.")
 
-
-
 elif page == "fill_data":
-    st.header("Điền dữ liệu từ dưới lên")
-    uploaded_file = st.file_uploader("📤 Tải lên file Excel (.xlsx)", type=["xlsx"])
-    if uploaded_file is not None:
-        render_fill_page(uploaded_file)
-    else:
-        st.info("📎 Vui lòng tải lên file Excel để bắt đầu.")
+    handle_excel_upload("Điền dữ liệu từ dưới lên", render_fill_page)
+
 elif page == "data_df":
-    st.header("Xử lý thông tin điều trị")
-    uploaded_file = st.file_uploader("📤 Tải lên file Excel (.xlsx)", type=["xlsx"])
-    if uploaded_file is not None:
-        st.subheader("Xử lý dữ liệu từ file đã tải lên:")
-        st.write("Vui lòng đợi trong giây lát...")
+    handle_excel_upload("Xử lý thông tin điều trị", handle_file_upload)
 
-        handle_file_upload(uploaded_file)
-    else:
-        st.info("📎 Vui lòng tải lên file Excel để bắt đầu.")
-    
 elif page == "customer_df":
-    st.header("Xử lý thông tin khách hàng")
-    uploaded_file = st.file_uploader("📤 Tải lên file Excel (.xlsx)", type=["xlsx"])
-    if uploaded_file is not None:
-        st.subheader("Xử lý dữ liệu từ file đã tải lên:")
-        st.write("Vui lòng đợi trong giây lát...")
-
-        handle_customer_file(uploaded_file)
-    else:
-        st.info("📎 Vui lòng tải lên file Excel để bắt đầu.")
+    handle_excel_upload("Xử lý thông tin khách hàng", handle_customer_file)
 
 elif page == "getdate_df":
-    st.header("Xử lý ngày ngày tạo")
-    uploaded_file = st.file_uploader("📤 Tải lên file Excel (.xlsx)", type=["xlsx"])
-    if uploaded_file is not None:
-        st.subheader("Xử lý dữ liệu từ file đã tải lên:")
-        st.write("Vui lòng đợi trong giây lát...")
+    handle_excel_upload("Xử lý ngày ngày tạo", handle_date_file)
 
-        handle_date_file(uploaded_file)
-    else:
-        st.info("📎 Vui lòng tải lên file Excel để bắt đầu.")
-    
 elif page == "guide":
-    st.header("Hướng dẫn sử dụng")
-    st.write("Để sử dụng ứng dụng này, bạn vui lòng làm theo các bước sau:")
-    st.write("1. Chọn các tùy chọn xử lý dữ liệu.")
-    st.write("2. Tải lên file Excel cần xử lý.")
-    st.write("3. Chờ trong giây lát.")
+    st.header("📘 Hướng dẫn sử dụng")
+    st.markdown("""
+    1. Chọn chức năng ở thanh menu bên trái.  
+    2. Tải lên file Excel cần xử lý.  
+    3. Đợi hệ thống xử lý và tải kết quả.  
+    """)
 
 elif page == "contact":
-
-    st.write("Facebook: https://fb.com/doananhdung.work")
-
-
-
+    st.header("📞 Liên hệ")
+    st.write("Facebook: [https://fb.com/doananhdung.work](https://fb.com/doananhdung.work)")
