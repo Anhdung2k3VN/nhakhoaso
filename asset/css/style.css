@@ -46,3 +46,44 @@ div[role="alert"] {
   color: #444;
   margin: 0;
 }
+/* Tùy chỉnh ô nhập văn bản của Streamlit */
+div[data-testid="stTextInput"] {
+  width: 280px;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+/* Bọc phần tử input để xử lý icon */
+div[data-testid="stTextInput"] > div {
+  position: relative;
+}
+
+/* Style cho input thực tế */
+div[data-testid="stTextInput"] input {
+  padding-right: 2.2rem !important;
+  padding-left: 0.75rem;
+  height: 38px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  transition: border-color 0.2s ease;
+}
+
+/* Hiệu ứng khi focus */
+div[data-testid="stTextInput"] input:focus {
+  outline: none;
+  border-color: #409eff;
+  box-shadow: 0 0 0 1px rgba(64, 158, 255, 0.2);
+}
+
+/* Icon 🔍 góc phải bên trong input */
+div[data-testid="stTextInput"]::after {
+  content: "🔍";
+  position: absolute;
+  right: 12px;
+  top: 75%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #999;
+  pointer-events: none;
+}
