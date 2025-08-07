@@ -76,7 +76,6 @@ div[data-testid="stTextInput"] input:focus {
   box-shadow: 0 0 0 1px rgba(64, 158, 255, 0.2);
 }
 
-/* Icon 🔍 góc phải bên trong input */
 div[data-testid="stTextInput"]::after {
   content: "🔍";
   position: absolute;
@@ -86,4 +85,17 @@ div[data-testid="stTextInput"]::after {
   font-size: 16px;
   color: #999;
   pointer-events: none;
+}
+div[data-testid="stButton"] > button {
+  padding: 4px 10px;
+  min-width: auto;
+  width: auto;
+  border-radius: 8px;
+  background-color: #1e1e1e;
+  color: white;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+div[data-testid="stButton"] > button:hover {
+  background-color: #444;
 }

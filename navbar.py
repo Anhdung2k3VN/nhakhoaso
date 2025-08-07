@@ -5,25 +5,29 @@ from pathlib import Path
 
 # ---------------- NAVIGATION ----------------
 def navbar():
-    st.sidebar.title("🔸 Menu điều hướng")
+    
     
     page = {
-        "🏡 Trang chủ": "home",
-        "🦷 Nha khoa số": {
-            "👤 Thông tin khách hàng": "customer_info",
-            "📊 Dữ liệu điều trị": "data_treatment"
-        },
-        "💻 Dental Flow": {
-            "📝 Fill Data": "fill_data",
-            "👥 Thông tin khách hàng": "customer_df",
-            "📈 Dữ liệu điều trị": "data_df",
-            "📆 Ngày tạo": "getdate_df"
-        },
-        "🪓 Chia file": "split_file",
-        "🧩 Gộp file": "merge_excel",
-        "🎨 Hình nền": "background",
-        "☎️ Liên hệ": "contact"
-    }
+    "🏠 Trang chủ": "home",
+    "🩺 Nha khoa số": {
+        "👤 Thông tin khách hàng": "customer_info",
+        "📊 Dữ liệu điều trị": "data_treatment"
+    },
+    "⚙️ Dental Flow": {
+        "📝 Điền dữ liệu": "fill_data",
+        "👥 Thông tin khách hàng": "customer_df",
+        "📈 Dữ liệu điều trị": "data_df",
+        "📅 Ngày tạo": "getdate_df"
+    },
+    "🎋 Bambufit": {
+        "👤 Thông tin khách hàng": "customer_bambufit",
+        "📊 Dữ liệu điều trị": "data_bambufit"
+    },
+    "✂️ Chia file": "split_file",
+    "📎 Gộp file": "merge_excel",
+    "🖼️ Hình nền": "background",
+    "📞 Liên hệ": "contact"
+}
 
     main_choices = list(page.keys())
     selected_main = st.sidebar.radio("Chọn trang:", main_choices)

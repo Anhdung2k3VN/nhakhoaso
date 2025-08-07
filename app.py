@@ -1,16 +1,24 @@
 import streamlit as st
 import random
-import requests
 
-from xulydata import xuly_file
-from khachhang import xuly_khach_hang
+
+
+from nhakhoaso.xulydata import xuly_file
+from nhakhoaso.khachhang import xuly_khach_hang
 from chiafile import split_and_download_excel
 from gopfile_app import gop_excel
 from navbar import navbar, set_background, load_quotes
-from fill import render_fill_page
-from data_df import handle_file_upload
-from customer_df import handle_customer_file
-from getdate import handle_date_file
+from dentalflow.fill import render_fill_page
+from dentalflow.data_df import handle_file_upload
+from dentalflow.customer_df import handle_customer_file
+from dentalflow.getdate import handle_date_file
+from bambufit.customer_bb import customer_file_bambufit
+from bambufit.data_bb import data_loaded_file
+
+
+
+
+
 from background import render_background_selector
 
 
@@ -50,9 +58,14 @@ if page == "home":
     if "quote" not in st.session_state:
         st.session_state.quote = random.choice(quotes)
 
+ 
+  
     if st.button("𖦹"):
-        st.session_state.quote = random.choice(quotes)
+            st.session_state.quote = random.choice(quotes)
 
+ 
+
+    # Hiển thị quote
     quote = st.session_state.quote
     st.markdown(f"""
         <div class='quote-box'>
@@ -60,6 +73,8 @@ if page == "home":
             <p class='quote-author'>— {quote['author']}</p>
         </div>
     """, unsafe_allow_html=True)
+
+
 
 # ------------------ CÁC CHỨC NĂNG ------------------
 elif page == "data_treatment":
@@ -91,6 +106,12 @@ elif page == "customer_df":
 
 elif page == "getdate_df":
     handle_excel_upload("Xử lý ngày tạo", handle_date_file)
+
+elif page == "customer_bambufit":
+    handle_excel_upload("Xử lý thông tin khách hàng", customer_file_bambufit)
+
+elif page =="data_bambufit":
+     handle_excel_upload("Xử lý thông tin khách hàng", data_loaded_file)
 
 
 elif page == "background":

@@ -4,7 +4,10 @@ import streamlit as st
 
 def format_datetime(value):
     try:
-        return pd.to_datetime(value).strftime("%d/%m/%Y %H:%M")
+        dt = pd.to_datetime(value, dayfirst=True, errors='coerce')
+        if pd.isna(dt):
+            return ""
+        return dt.strftime("%d/%m/%Y %H:%M")
     except:
         return ""
 
@@ -28,36 +31,43 @@ def safe_phone(val):
         val_str = str(val).strip()
         if val_str.endswith('.0'):
             val_str = val_str[:-2]
-        if not val_str.startswith("0"):
+        val_str = ''.join(filter(str.isdigit, val_str))  # giữ lại chỉ số
+        if len(val_str) == 9 and not val_str.startswith("0"):
             val_str = "0" + val_str
+        elif len(val_str) == 10 and val_str.startswith("0"):
+            pass
+        else:
+            val_str = ""
         return val_str
     except:
         return ""
 
-def merge_phu_ta(pt1, pt2):
-    pt1 = safe_str(pt1)
-    pt2 = safe_str(pt2)
-    if pt1 and pt2:
-        return f"{pt1}, {pt2}"
-    return pt1 or pt2
-
 def process_customer_data(df):
     df.columns = df.columns.str.strip()
-    rows = []
 
+    # 💡 Chỉ định các cột thông tin cần fill xuống
+    columns_to_fill = ["ID", "Họ và tên", "Di động"]
+
+    df[columns_to_fill] = df[columns_to_fill].fillna(method='ffill')
+
+    rows = []
     for _, row in df.iterrows():
+        ngay = row.get("Ngày")
+        gio = row.get("Giờ")
+        datetime_str = f"{ngay} {gio}"
+
         new_row = {
-            "Mã KH": safe_int(row.get("Mã hồ sơ")),
-            "Tên khách hàng": safe_str(row.get("Họ tên")),
-            "SDT khách hàng": safe_phone(row.get("Điện thoại")),
-            "Ngày điều trị (*)": format_datetime(row.get("Ngày điều trị")),
+            "Mã KH": safe_str(row.get("ID")),
+            "Tên khách hàng": safe_str(row.get("Họ và tên")),
+            "SDT khách hàng": safe_phone(row.get("Di động")),
+            "Ngày điều trị (*)": format_datetime(datetime_str),
             "Thông tin điều trị (*)": safe_str(row.get("Thủ thuật")),
             "Răng/Chẩn đoán": safe_str(row.get("Nội dung điều trị")),
-            "Tổng tiền": safe_int(row.get("Phải thanh toán")),
-            "Thanh toán": safe_int(row.get("Đã thanh toán")),
-            "Còn lại": safe_int(row.get("Còn lại")),
-            "Bác sĩ": safe_str(row.get("Bác sĩ điều trị")),
-            "Phụ tá": merge_phu_ta(row.get("Trợ thủ 1"), row.get("Trợ thủ 2")),
+            "Tổng tiền": safe_int(row.get("Phải trả")),
+            "Thanh toán": safe_int(row.get("Đã thu")),
+            "Còn lại": safe_int(row.get("Còn nợ")),
+            "Bác sĩ": safe_str(row.get("Bác sỹ")),
+            "Phụ tá": "",
             "Nguồn tiền": "",
             "Mã dịch vụ": "",
             "Trạng thái": ""
@@ -66,7 +76,8 @@ def process_customer_data(df):
 
     return pd.DataFrame(rows)
 
-def handle_file_upload(uploaded_file):
+
+def data_loaded_file(uploaded_file):
     try:
         df = pd.read_excel(uploaded_file, engine='openpyxl')
         processed_df = process_customer_data(df)
@@ -82,8 +93,10 @@ def handle_file_upload(uploaded_file):
         st.download_button(
             label="📥 Tải về file kết quả",
             data=output,
-            file_name="output.xlsx",
+            file_name="output_khachhang.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
     except Exception as e:
         st.error(f"❌ Lỗi xử lý file: {e}")
+
+
