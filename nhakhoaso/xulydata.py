@@ -19,11 +19,11 @@ def xuly_file(uploaded_file):
         converted = pd.DataFrame()
 
         # 1. Mã KH
-        converted["Mã KH"] = data1.get("Số HS", "")
+        converted["Mã KH"] = data1.get("Mã KH", "")
 
         # 2. Tên khách hàng
         converted["Tên khách hàng"] = (
-            data1.get("Họ và tên")
+            data1.get("Họ và tên", "")
             .fillna("")
             .astype(str)
             .str.replace(r"\*", "", regex=True)
