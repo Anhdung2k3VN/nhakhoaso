@@ -19,11 +19,11 @@ def xuly_file(uploaded_file):
         converted = pd.DataFrame()
 
         # 1. Mã KH
-        converted["Mã KH"] = data1.get("Mã KH", "")
+        converted["Mã KH"] = data1.get("Số HS", pd.Series([""] * len(data1)))
 
         # 2. Tên khách hàng
         converted["Tên khách hàng"] = (
-            data1.get("Họ và tên", "")
+            data1.get("Họ và tên", pd.Series([""] * len(data1)))
             .fillna("")
             .astype(str)
             .str.replace(r"\*", "", regex=True)
@@ -31,19 +31,22 @@ def xuly_file(uploaded_file):
         )
 
         # 3. SĐT khách hàng
-        converted["SDT khách hàng"] = data1.get("Điện thoại", "")
+        converted["SDT khách hàng"] = data1.get("Điện thoại", pd.Series([""] * len(data1)))
 
         # 4. Ngày điều trị
         def format_date_safe(x):
             if pd.isna(x):
                 return ""
-            return pd.to_datetime(x).strftime("%d/%m/%Y 00:00")
+            try:
+                return pd.to_datetime(x, dayfirst=True).strftime("%d/%m/%Y 00:00")
+            except:
+                return str(x)
 
         converted["Ngày điều trị"] = data1.get("Ngày", pd.Series([""] * len(data1))).apply(format_date_safe)
 
         # 5. Thông tin điều trị
         converted["Thông tin điều trị"] = (
-            data1.get("Tên thủ thuật ")
+            data1.get("Tên thủ thuật ", pd.Series([""] * len(data1)))
             .fillna("")
             .astype(str)
             .str.replace(r"\*", "", regex=True)
@@ -51,21 +54,23 @@ def xuly_file(uploaded_file):
         )
 
         # 6. Răng/Chẩn đoán
-        converted["Răng/Chẩn đoán"] = data1["Lịch liệu trình"].fillna("KHÁM & TƯ VẤN")
+        converted["Răng/Chẩn đoán"] = data1.get("Lịch liệu trình", pd.Series([""] * len(data1))).fillna("KHÁM & TƯ VẤN")
 
 
         # 7. Tổng tiền
-        converted["Tổng tiền"] = data1.get("Thực thu", 0) + data1.get("Còn nợ", 0)
+        thuc_thu = pd.to_numeric(data1.get("Thực thu", pd.Series([0] * len(data1))), errors='coerce').fillna(0)
+        con_no = pd.to_numeric(data1.get("Còn nợ", pd.Series([0] * len(data1))), errors='coerce').fillna(0)
+        converted["Tổng tiền"] = thuc_thu + con_no
 
         # 8. Thanh toán
-        converted["Thanh toán"] = data1.get("Thực thu", 0)
+        converted["Thanh toán"] = thuc_thu
 
         # 9. Còn lại
-        converted["Còn lại"] = data1.get("Còn nợ", 0)
+        converted["Còn lại"] = con_no
 
         # 10. Bác sĩ
         converted["Bác sĩ"] = (
-            data1.get("Bác sĩ")
+            data1.get("Bác sĩ", pd.Series([""] * len(data1)))
             .fillna("")
             .astype(str)
             .str.replace(r"\*", "", regex=True)
@@ -76,7 +81,7 @@ def xuly_file(uploaded_file):
         converted["Phụ tá"] = ""
 
         # 12. Nguồn tiền
-        converted["Nguồn tiền"] = data1.get("HTT Toán", "")
+        converted["Nguồn tiền"] = data1.get("HTT Toán", pd.Series([""] * len(data1)))
 
         # 13. Mã dịch vụ
         converted["Mã dịch vụ"] = ""

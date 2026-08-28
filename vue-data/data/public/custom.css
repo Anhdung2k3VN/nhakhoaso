@@ -1,0 +1,219 @@
+:root {
+  --bg-deep: #0c1424;
+  --bg-soft: #172036;
+  --text: #e6edf3;
+  --muted: #94a3b8;
+  --brand: #5eead4; /* mint */
+  --brand-2: #60a5fa; /* blue */
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body,
+#app {
+  height: 100%;
+}
+body {
+  background: var(--bg-deep);
+  color: var(--text);
+  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
+    Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+/* Navbar */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: saturate(120%) blur(6px);
+}
+.navbar-dark {
+  background: rgba(15, 23, 42, 0.9) !important;
+}
+.navbar-brand {
+  color: #fff !important;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+.navbar-dark .nav-link {
+  color: #cbd5e1 !important;
+}
+.navbar-dark .nav-item.active .nav-link,
+.navbar-dark .nav-link:hover {
+  color: #fff !important;
+}
+
+/* Containers / headings */
+.container,
+.container-fluid {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+h1,
+h2,
+h3,
+h4 {
+  color: #eaf2ff;
+  margin-bottom: 0.75rem;
+}
+.lead,
+.text-muted {
+  color: var(--muted) !important;
+}
+
+/* Cards */
+.card {
+  background: var(--bg-soft);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+.card .card-title {
+  font-weight: 600;
+}
+
+/* Buttons */
+.btn {
+  border-radius: 0.75rem;
+  font-weight: 600;
+}
+.btn-primary {
+  background: linear-gradient(90deg, var(--brand-2), var(--brand));
+  border: none;
+}
+.btn-success {
+  background: linear-gradient(90deg, #34d399, #22d3ee);
+  border: none;
+}
+.btn-outline-primary {
+  color: var(--brand-2);
+  border-color: rgba(96, 165, 250, 0.6);
+}
+.btn-outline-primary:hover {
+  background: rgba(96, 165, 250, 0.12);
+  color: #fff;
+}
+
+/* Tables */
+.table {
+  color: #cbd5e1;
+}
+.table thead th {
+  border-top: none;
+  color: #e2e8f0;
+  background: rgba(255, 255, 255, 0.04);
+}
+.table td,
+.table th {
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+/* Forms */
+.form-control,
+.custom-file-input {
+  background: #0f172a;
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.65rem;
+}
+.form-control::placeholder {
+  color: #94a3b8;
+}
+
+/* Footer */
+.app-footer {
+  color: var(--muted);
+  padding: 2rem 0;
+  text-align: center;
+}
+
+/* Utility spacing */
+.section {
+  padding: 2rem 0;
+}
+.section .section-head {
+  margin-bottom: 1.25rem;
+}
+/* ===== NAVBAR POLISH ===== */
+.navbar-dark {
+  background: #0b1222 !important;
+}
+.navbar {
+  min-height: 64px;
+  padding-top: 0.35rem;
+  padding-bottom: 0.35rem;
+}
+
+/* brand */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+
+/* nav container scrollable (mobile) */
+.navbar .nav-scroll {
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  gap: 0.25rem;
+}
+.navbar .nav-scroll::-webkit-scrollbar {
+  height: 0;
+}
+
+/* items */
+.navbar .nav-item {
+  margin-right: 0.25rem;
+}
+.navbar .nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.85rem;
+  border-radius: 0.65rem;
+  color: #cdd6e5 !important;
+  white-space: nowrap; /* không xuống dòng */
+  position: relative;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.12s ease;
+}
+.navbar .nav-link .icon {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+/* hover + focus */
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff !important;
+  text-decoration: none;
+}
+
+/* active: nền pill + gạch chân sáng */
+.navbar .nav-item.active > .nav-link {
+  background: linear-gradient(90deg, #60a5fa33, #5eead433);
+  color: #fff !important;
+  font-weight: 700;
+}
+.navbar .nav-item.active > .nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0.7rem;
+  right: 0.7rem;
+  bottom: 0.25rem;
+  height: 2px;
+  background: linear-gradient(90deg, #60a5fa, #5eead4);
+  border-radius: 2px;
+}
+
+/* compact on very narrow screens */
+@media (max-width: 420px) {
+  .navbar .nav-link {
+    padding: 0.45rem 0.7rem;
+  }
+}
